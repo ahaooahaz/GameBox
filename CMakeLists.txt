@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.0)
-project(GameBox)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+PROJECT(GameBox)
 
-set(CMAKE_CXX_FLAGS "-std=c++11")
+SET(CMAKE_CXX_FLAGS "-std=c++11")
 
-aux_source_directory(./src SRC)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps)
 
-include_directories(./src)
+AUX_SOURCE_DIRECTORY(${PROJECT_SOURCE_DIR}/src SRC)
 
-add_executable(gamebox ${SRC})
+ADD_EXECUTABLE(gamebox ${SRC})

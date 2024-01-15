@@ -1,0 +1,3 @@
+[submodule "deps/cmdline"]
+	path = deps/cmdline
+	url = ../../tanakh/cmdline.git

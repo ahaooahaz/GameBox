@@ -1,4 +1,5 @@
 #include <string.h>
+#include <cmdline/cmdline.h>
 
 #include "2048.h"
 #include "snake.h"
@@ -6,11 +7,12 @@
 
 enum
 {
+    GAME_UNKNOWN,
     GAME_2048,
     GAME_Snake,
 };
 
-int game_2048()
+int game_2048(int argc, char *argv[])
 {
     Game_2048 g;
     g.Init(4, 4);
@@ -20,7 +22,7 @@ int game_2048()
 
 void usage()
 {
-    printf("./snake [version]\n");
+    
 }
 
 int game_snake(int argc, char *argv[])
@@ -45,16 +47,32 @@ int game_snake(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-    int game = GAME_2048;
-    if (argc >= 2)
+    cmdline::parser a;
+    a.add("version", '\0', "show version");
+    a.add<std::string>("run", 'r', "game name. [2048|snake]", false, "2048", cmdline::oneof<std::string>("2048", "snake"));
+    a.parse_check(argc, argv);
+
+    if (a.exist("version")) 
     {
-        game = GAME_Snake;
+        version();
+        return 0;
     }
 
-    switch (game)
+    auto run = GAME_UNKNOWN;
+    if (a.get<std::string>("run") == "2048")
+    {
+        run = GAME_2048;
+    } else if (a.get<std::string>("run") == "snake") {
+        run = GAME_Snake;
+    } else {
+        a.usage();
+        return 1;
+    }
+
+    switch (run)
     {
     case GAME_2048:
-        return game_2048();
+        return game_2048(argc, argv);
     case GAME_Snake:
         return game_snake(argc, argv);
     }
